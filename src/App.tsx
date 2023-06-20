@@ -9,7 +9,7 @@ function App() {
       p={4}
       templateAreas={`"nav nav""aside main"`}
       gridTemplateColumns={'250px 1fr'}
-      gap={4}
+      gap={8}
     >
       <GridItem area='nav'>
         <Navbar />
@@ -18,7 +18,7 @@ function App() {
         <Sidebar />
       </GridItem>
       <GridItem as='main' area='main'>
-        <Heading as='h2' size='3xl'>
+        <Heading as='h2' size='3xl' pt='4px'>
           [Type] Games
         </Heading>
         <GameList />
