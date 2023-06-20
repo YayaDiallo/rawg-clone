@@ -1,4 +1,4 @@
-import { Grid, GridItem } from '@chakra-ui/react';
+import { Grid, GridItem, Heading } from '@chakra-ui/react';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 import { GameList } from './components/GameList';
@@ -14,10 +14,13 @@ function App() {
       <GridItem area='nav'>
         <Navbar />
       </GridItem>
-      <GridItem as='aside' bg='purple' area='aside'>
+      <GridItem as='aside' area='aside'>
         <Sidebar />
       </GridItem>
       <GridItem as='main' area='main'>
+        <Heading as='h2' size='3xl'>
+          [Type] Games
+        </Heading>
         <GameList />
       </GridItem>
     </Grid>
