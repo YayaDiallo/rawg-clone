@@ -95,3 +95,29 @@ export const genres = [
       'https://media.rawg.io/media/crop/600/400/screenshots/ca2/ca257e3481af0b2c8149d6600440aa85.jpeg',
   },
 ];
+
+export const platforms = [
+  'PC',
+  'PlayStation',
+  'Xbox',
+  'IOS',
+  'Android',
+  'Apple Macintosh',
+  'Linux',
+  'Nintendo',
+  'Atari',
+  'Commodore / Amiga',
+  'SEGA',
+  '3DO',
+  'Neo Geo',
+  'Web',
+];
+
+export const sortList = [
+  'Relevance',
+  'Date added',
+  'Name',
+  'Release date',
+  'Popularity',
+  'Average rating',
+];

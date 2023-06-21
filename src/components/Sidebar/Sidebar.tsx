@@ -12,7 +12,7 @@ import { genres } from '../../utils/constants';
 
 export function Sidebar() {
   return (
-    <VStack pt='8px' alignItems='flex-start'>
+    <VStack pt={4} alignItems='flex-start'>
       <Heading>Genres</Heading>
       <UnorderedList m='0px'>
         {genres.map((genre) => (
