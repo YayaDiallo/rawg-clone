@@ -78,20 +78,6 @@ export function GameList() {
           </Box>
         </Flex>
       </Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
-
-      <Box bg='white' h='200px' border='1px solid'></Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
-
-      <Box bg='white' h='200px' border='1px solid'></Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
-      <Box bg='white' h='200px' border='1px solid'></Box>
     </SimpleGrid>
   );
 }
