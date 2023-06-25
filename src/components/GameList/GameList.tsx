@@ -7,22 +7,15 @@ import {
   SimpleGrid,
   Text,
 } from '@chakra-ui/react';
-import {
-  FaPlaystation,
-  FaLinux,
-  FaXbox,
-  FaWindows,
-  FaApple,
-} from 'react-icons/fa';
 import { GoGoal } from 'react-icons/go';
 import { useEffect, useState } from 'react';
 import { apiInstance } from '../../services/api-client';
+import { PlatformIconList } from './PlatformIconList';
 
-interface Platform {
-  platform: {
-    id: number;
-    name: string;
-  };
+export interface Platform {
+  id: number;
+  name: string;
+  slug: string;
 }
 interface GameData {
   id: number;
@@ -30,7 +23,7 @@ interface GameData {
   name: string;
   slug: string;
   metacritic: number;
-  parent_platforms: Platform[];
+  parent_platforms: { platform: Platform }[];
 }
 
 export function GameList() {
@@ -62,13 +55,11 @@ export function GameList() {
           />
           <Flex p={3} flexDirection='column' gap={3}>
             <Box display='flex' justifyContent='space-between'>
-              <Flex alignItems='end' gap={3}>
-                <FaPlaystation />
-                <FaLinux />
-                <FaXbox />
-                <FaApple />
-                <FaWindows />
-              </Flex>
+              <PlatformIconList
+                platforms={game.parent_platforms.map(
+                  ({ platform }) => platform,
+                )}
+              />
               <Badge fontSize='0.8em' colorScheme='green'>
                 {game.metacritic}
               </Badge>
