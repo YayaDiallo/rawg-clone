@@ -34,7 +34,11 @@ export function PlatformIconList({ platforms }: Props) {
     <>
       <Flex alignItems='end' gap={3}>
         {platforms.map((platform) => (
-          <Icon as={iconMap[platform.slug]} color='gray.500' />
+          <Icon
+            key={platform.id}
+            as={iconMap[platform.slug]}
+            color='gray.500'
+          />
         ))}
       </Flex>
     </>
