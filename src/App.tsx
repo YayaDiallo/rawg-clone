@@ -4,8 +4,11 @@ import { Sidebar } from './components/Sidebar';
 import { GameList } from './components/GameList';
 import { GameFilter } from './components/GameFilter';
 import { GameSorting } from './components/GameSorting';
+import { useState } from 'react';
 
 function App() {
+  const [platformId, setPlatformId] = useState<number>();
+
   return (
     <Grid
       p={4}
@@ -24,10 +27,10 @@ function App() {
           [Type] Games
         </Heading>
         <Flex gap={4} py={4}>
-          <GameFilter />
+          <GameFilter onSetPlatformId={setPlatformId} />
           <GameSorting />
         </Flex>
-        <GameList />
+        <GameList platformId={platformId} />
       </GridItem>
     </Grid>
   );

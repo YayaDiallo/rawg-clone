@@ -1,5 +1,7 @@
-import axios from 'axios';
+import axios, { CanceledError } from 'axios';
 
-export const apiInstance = axios.create({
+const apiInstance = axios.create({
   baseURL: 'https://api.rawg.io/api',
 });
+
+export { apiInstance, CanceledError };

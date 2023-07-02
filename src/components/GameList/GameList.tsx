@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { GoGoal } from 'react-icons/go';
 import { useEffect, useState } from 'react';
-import { apiInstance } from '../../services/api-client';
+import { CanceledError, apiInstance } from '../../services/api-client';
 import { PlatformIconList } from './PlatformIconList';
 
 export interface Platform {
@@ -26,16 +26,34 @@ interface GameData {
   parent_platforms: { platform: Platform }[];
 }
 
-export function GameList() {
+interface Props {
+  platformId?: number;
+}
+
+export function GameList({ platformId }: Props) {
   const [games, setGames] = useState<GameData[]>([]);
   const [error, setError] = useState('');
 
+  const key = import.meta.env.VITE_RAWG_API_KEY;
+  const gamesUrl = platformId
+    ? `/games?key=${key}&parent_platforms=${platformId}`
+    : `/games?key=${key}`;
+
   useEffect(() => {
+    const abortController = new AbortController();
+
     apiInstance
-      .get(`/games?key=${import.meta.env.VITE_RAWG_API_KEY}`)
+      .get(gamesUrl, {
+        signal: abortController.signal,
+      })
       .then((response) => setGames(response.data.results))
-      .catch((error) => setError(error.message));
-  }, []);
+      .catch((error) => {
+        if (error instanceof CanceledError) return;
+        setError(error.message);
+      });
+
+    return () => abortController.abort();
+  }, [platformId, gamesUrl]);
 
   return (
     <SimpleGrid columns={3} spacing={5} minChildWidth='250px'>
