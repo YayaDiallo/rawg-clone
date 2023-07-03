@@ -12,15 +12,19 @@ import {
 } from '@chakra-ui/react';
 import { apiInstance } from '../../services/api-client';
 
-interface GenresData {
+export interface GenreData {
   id: number;
   name: string;
   image_background: string;
   slug: string;
 }
 
-export function Sidebar() {
-  const [genres, setGenres] = useState<GenresData[]>([]);
+interface Props {
+  onSetGenre: (data: GenreData) => void;
+}
+
+export function Sidebar({ onSetGenre }: Props) {
+  const [genres, setGenres] = useState<GenreData[]>([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -47,7 +51,11 @@ export function Sidebar() {
                   alt={genre.slug}
                 />
               </Box>
-              <Button variant='link' fontWeight='normal'>
+              <Button
+                variant='link'
+                fontWeight='normal'
+                onClick={() => onSetGenre(genre)}
+              >
                 {genre.name}
               </Button>
             </Flex>

@@ -5,9 +5,11 @@ import { GameList } from './components/GameList';
 import { GameFilter } from './components/GameFilter';
 import { GameSorting } from './components/GameSorting';
 import { useState } from 'react';
+import { GenreData } from './components/Sidebar/Sidebar';
 
 function App() {
   const [platformId, setPlatformId] = useState<number>();
+  const [genre, setGenre] = useState<GenreData>();
 
   return (
     <Grid
@@ -20,17 +22,17 @@ function App() {
         <Navbar />
       </GridItem>
       <GridItem as='aside' area='aside'>
-        <Sidebar />
+        <Sidebar onSetGenre={setGenre} />
       </GridItem>
       <GridItem as='main' area='main'>
         <Heading as='h2' size='3xl' py={2} mb={4}>
-          [Type] Games
+          {genre && genre.name} Games
         </Heading>
         <Flex gap={4} py={4}>
           <GameFilter onSetPlatformId={setPlatformId} />
           <GameSorting />
         </Flex>
-        <GameList platformId={platformId} />
+        <GameList platformId={platformId} genreId={genre?.id} />
       </GridItem>
     </Grid>
   );

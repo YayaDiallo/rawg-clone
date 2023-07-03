@@ -28,16 +28,35 @@ interface GameData {
 
 interface Props {
   platformId?: number;
+  genreId?: number;
 }
 
-export function GameList({ platformId }: Props) {
+export function GameList({ platformId, genreId }: Props) {
   const [games, setGames] = useState<GameData[]>([]);
   const [error, setError] = useState('');
 
-  const key = import.meta.env.VITE_RAWG_API_KEY;
-  const gamesUrl = platformId
-    ? `/games?key=${key}&parent_platforms=${platformId}`
-    : `/games?key=${key}`;
+  const key: string = import.meta.env.VITE_RAWG_API_KEY;
+
+  const queryParams = {
+    key,
+    parent_platforms: platformId,
+    genres: genreId,
+  };
+
+  const constructUrlParams = (params: typeof queryParams) => {
+    let myParams = `?key=${params.key}`;
+    for (const query in params) {
+      const isParamsFilter = query !== 'key';
+      myParams +=
+        isParamsFilter && params[query as keyof typeof params]
+          ? `&${query}=${params[query as keyof typeof params]}`
+          : '';
+    }
+
+    return myParams;
+  };
+
+  const gamesUrl = `/games${constructUrlParams(queryParams)}`;
 
   useEffect(() => {
     const abortController = new AbortController();
