@@ -12,6 +12,7 @@ function App() {
   const [platformId, setPlatformId] = useState<number>();
   const [genre, setGenre] = useState<GenreData>();
   const [sortItem, setSortItem] = useState<SortItem>();
+  const [searchValue, setSearchValue] = useState<string | undefined>();
 
   return (
     <Grid
@@ -21,7 +22,7 @@ function App() {
       gap={8}
     >
       <GridItem area='nav'>
-        <Navbar />
+        <Navbar onSetSearchValue={setSearchValue} />
       </GridItem>
       <GridItem as='aside' area='aside'>
         <Sidebar onSetGenre={setGenre} />
@@ -38,6 +39,7 @@ function App() {
           platformId={platformId}
           genreId={genre?.id}
           sortItem={sortItem}
+          searchValue={searchValue}
         />
       </GridItem>
     </Grid>

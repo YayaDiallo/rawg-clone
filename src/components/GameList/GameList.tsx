@@ -19,6 +19,7 @@ export interface Platform {
   name: string;
   slug: string;
 }
+
 interface GameData {
   id: number;
   background_image: string;
@@ -32,9 +33,15 @@ interface Props {
   platformId?: number;
   genreId?: number;
   sortItem?: SortItem;
+  searchValue?: string;
 }
 
-export function GameList({ platformId, genreId, sortItem }: Props) {
+export function GameList({
+  platformId,
+  genreId,
+  sortItem,
+  searchValue,
+}: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [games, setGames] = useState<GameData[]>([]);
   const [error, setError] = useState('');
@@ -46,6 +53,7 @@ export function GameList({ platformId, genreId, sortItem }: Props) {
     parent_platforms: platformId,
     genres: genreId,
     ordering: sortItem?.value,
+    search: searchValue,
   };
 
   const constructUrlParams = (params: typeof queryParams) => {
