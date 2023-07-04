@@ -11,6 +11,7 @@ import { GoGoal } from 'react-icons/go';
 import { useEffect, useState } from 'react';
 import { CanceledError, apiInstance } from '../../services/api-client';
 import { PlatformIconList } from './PlatformIconList';
+import { SortItem } from '../GameSorting/GameSorting';
 
 export interface Platform {
   id: number;
@@ -29,9 +30,10 @@ interface GameData {
 interface Props {
   platformId?: number;
   genreId?: number;
+  sortItem?: SortItem;
 }
 
-export function GameList({ platformId, genreId }: Props) {
+export function GameList({ platformId, genreId, sortItem }: Props) {
   const [games, setGames] = useState<GameData[]>([]);
   const [error, setError] = useState('');
 
@@ -41,6 +43,7 @@ export function GameList({ platformId, genreId }: Props) {
     key,
     parent_platforms: platformId,
     genres: genreId,
+    ordering: sortItem?.value,
   };
 
   const constructUrlParams = (params: typeof queryParams) => {
@@ -72,7 +75,7 @@ export function GameList({ platformId, genreId }: Props) {
       });
 
     return () => abortController.abort();
-  }, [platformId, gamesUrl]);
+  }, [platformId, gamesUrl, sortItem]);
 
   return (
     <SimpleGrid columns={3} spacing={5} minChildWidth='250px'>

@@ -6,10 +6,12 @@ import { GameFilter } from './components/GameFilter';
 import { GameSorting } from './components/GameSorting';
 import { useState } from 'react';
 import { GenreData } from './components/Sidebar/Sidebar';
+import { SortItem } from './components/GameSorting/GameSorting';
 
 function App() {
   const [platformId, setPlatformId] = useState<number>();
   const [genre, setGenre] = useState<GenreData>();
+  const [sortItem, setSortItem] = useState<SortItem>();
 
   return (
     <Grid
@@ -30,9 +32,13 @@ function App() {
         </Heading>
         <Flex gap={4} py={4}>
           <GameFilter onSetPlatformId={setPlatformId} />
-          <GameSorting />
+          <GameSorting onSetSortItem={setSortItem} />
         </Flex>
-        <GameList platformId={platformId} genreId={genre?.id} />
+        <GameList
+          platformId={platformId}
+          genreId={genre?.id}
+          sortItem={sortItem}
+        />
       </GridItem>
     </Grid>
   );

@@ -1,8 +1,26 @@
 export const sortList = [
-  'Relevance',
-  'Date added',
-  'Name',
-  'Release date',
-  'Popularity',
-  'Average rating',
+  {
+    name: 'Relevance',
+    value: '',
+  },
+  {
+    name: 'Date Added',
+    value: 'added',
+  },
+  {
+    name: 'Name',
+    value: 'name',
+  },
+  {
+    name: 'Release date',
+    value: 'released',
+  },
+  {
+    name: 'Popularity',
+    value: 'metacritic',
+  },
+  {
+    name: 'Average rating',
+    value: 'rating',
+  },
 ];
