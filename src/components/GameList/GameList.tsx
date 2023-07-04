@@ -5,6 +5,7 @@ import {
   Heading,
   Image,
   SimpleGrid,
+  Skeleton,
   Text,
 } from '@chakra-ui/react';
 import { GoGoal } from 'react-icons/go';
@@ -34,6 +35,7 @@ interface Props {
 }
 
 export function GameList({ platformId, genreId, sortItem }: Props) {
+  const [isLoading, setIsLoading] = useState(false);
   const [games, setGames] = useState<GameData[]>([]);
   const [error, setError] = useState('');
 
@@ -62,16 +64,21 @@ export function GameList({ platformId, genreId, sortItem }: Props) {
   const gamesUrl = `/games${constructUrlParams(queryParams)}`;
 
   useEffect(() => {
+    setIsLoading(true);
     const abortController = new AbortController();
 
     apiInstance
       .get(gamesUrl, {
         signal: abortController.signal,
       })
-      .then((response) => setGames(response.data.results))
+      .then((response) => {
+        setGames(response.data.results);
+        setIsLoading(false);
+      })
       .catch((error) => {
         if (error instanceof CanceledError) return;
         setError(error.message);
+        setIsLoading(false);
       });
 
     return () => abortController.abort();
@@ -88,28 +95,36 @@ export function GameList({ platformId, genreId, sortItem }: Props) {
           borderRadius='lg'
           overflow='hidden'
         >
-          <Image
-            objectFit='cover'
-            src={game.background_image}
-            alt={game.slug}
-          />
+          <Skeleton isLoaded={!isLoading} fadeDuration={1}>
+            <Image
+              objectFit='cover'
+              src={game.background_image}
+              alt={game.slug}
+            />
+          </Skeleton>
           <Flex p={3} flexDirection='column' gap={3}>
-            <Box display='flex' justifyContent='space-between'>
-              <PlatformIconList
-                platforms={game.parent_platforms.map(
-                  ({ platform }) => platform,
-                )}
-              />
-              <Badge fontSize='0.8em' colorScheme='green'>
-                {game.metacritic}
-              </Badge>
-            </Box>
-            <Heading my={2} as='h2' size='md'>
-              {game.name}
-            </Heading>
-            <Box>
-              <GoGoal size={30} />
-            </Box>
+            <Skeleton isLoaded={!isLoading} fadeDuration={1}>
+              <Box display='flex' justifyContent='space-between'>
+                <PlatformIconList
+                  platforms={game.parent_platforms.map(
+                    ({ platform }) => platform,
+                  )}
+                />
+                <Badge fontSize='0.8em' colorScheme='green'>
+                  {game.metacritic}
+                </Badge>
+              </Box>
+            </Skeleton>
+            <Skeleton isLoaded={!isLoading} fadeDuration={1}>
+              <Heading my={2} as='h2' size='md'>
+                {game.name}
+              </Heading>
+            </Skeleton>
+            <Skeleton isLoaded={!isLoading} fadeDuration={1}>
+              <Box>
+                <GoGoal size={30} />
+              </Box>
+            </Skeleton>
           </Flex>
         </Box>
       ))}
