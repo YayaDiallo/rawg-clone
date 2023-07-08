@@ -6,13 +6,14 @@ import {
   Image,
   SimpleGrid,
   Skeleton,
+  Spinner,
   Text,
 } from '@chakra-ui/react';
 import { GoGoal } from 'react-icons/go';
-import { useEffect, useState } from 'react';
-import { CanceledError, apiInstance } from '../../services/api-client';
 import { PlatformIconList } from './PlatformIconList';
 import { SortItem } from '../GameSorting/GameSorting';
+import { useGames } from '../../hooks/useGames';
+import { EmptyState } from '../EmptyState';
 
 export interface Platform {
   id: number;
@@ -20,7 +21,7 @@ export interface Platform {
   slug: string;
 }
 
-interface GameData {
+export interface GameData {
   id: number;
   background_image: string;
   name: string;
@@ -42,10 +43,6 @@ export function GameList({
   sortItem,
   searchValue,
 }: Props) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [games, setGames] = useState<GameData[]>([]);
-  const [error, setError] = useState('');
-
   const key: string = import.meta.env.VITE_RAWG_API_KEY;
 
   const queryParams = {
@@ -70,27 +67,29 @@ export function GameList({
   };
 
   const gamesUrl = `/games${constructUrlParams(queryParams)}`;
+  const { games, isLoading, error } = useGames(gamesUrl);
 
-  useEffect(() => {
-    setIsLoading(true);
-    const abortController = new AbortController();
+  if (isLoading) {
+    return (
+      <Flex justifyContent='center' alignItems='center' h='55vh'>
+        <Spinner
+          thickness='4px'
+          speed='0.65s'
+          emptyColor='gray.200'
+          color='blue.500'
+          size='xl'
+        />
+      </Flex>
+    );
+  }
 
-    apiInstance
-      .get(gamesUrl, {
-        signal: abortController.signal,
-      })
-      .then((response) => {
-        setGames(response.data.results);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error instanceof CanceledError) return;
-        setError(error.message);
-        setIsLoading(false);
-      });
-
-    return () => abortController.abort();
-  }, [platformId, gamesUrl, sortItem]);
+  if (games?.length === 0) {
+    return (
+      <Box>
+        <EmptyState match='games' />
+      </Box>
+    );
+  }
 
   return (
     <SimpleGrid columns={3} spacing={5} minChildWidth='250px'>
