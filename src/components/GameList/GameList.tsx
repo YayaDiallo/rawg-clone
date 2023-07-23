@@ -6,7 +6,6 @@ import {
   Image,
   SimpleGrid,
   Skeleton,
-  Spinner,
   Text,
 } from '@chakra-ui/react';
 import { GoGoal } from 'react-icons/go';
@@ -14,6 +13,7 @@ import { PlatformIconList } from './PlatformIconList';
 import { SortItem } from '../GameSorting/GameSorting';
 import { useGames } from '../../hooks/useGames';
 import { EmptyState } from '../EmptyState';
+import { getCroppedImageUrl } from '../../utils/croppedImageUrl';
 
 export interface Platform {
   id: number;
@@ -69,20 +69,6 @@ export function GameList({
   const gamesUrl = `/games${constructUrlParams(queryParams)}`;
   const { games, isLoading, error } = useGames(gamesUrl);
 
-  if (isLoading) {
-    return (
-      <Flex justifyContent='center' alignItems='center' h='55vh'>
-        <Spinner
-          thickness='4px'
-          speed='0.65s'
-          emptyColor='gray.200'
-          color='blue.500'
-          size='xl'
-        />
-      </Flex>
-    );
-  }
-
   if (games?.length === 0) {
     return (
       <Box>
@@ -105,7 +91,7 @@ export function GameList({
           <Skeleton isLoaded={!isLoading} fadeDuration={1}>
             <Image
               objectFit='cover'
-              src={game.background_image}
+              src={getCroppedImageUrl(game.background_image)}
               alt={game.slug}
             />
           </Skeleton>
