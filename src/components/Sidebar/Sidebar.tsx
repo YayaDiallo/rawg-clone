@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -10,29 +9,14 @@ import {
   VStack,
   Text,
 } from '@chakra-ui/react';
-import { apiInstance } from '../../services/api-client';
-
-export interface GenreData {
-  id: number;
-  name: string;
-  image_background: string;
-  slug: string;
-}
+import { Genre, useGenres } from '../../hooks/useGenres';
 
 interface Props {
-  onSetGenre: (data: GenreData) => void;
+  onSetGenre: (data: Genre) => void;
 }
 
 export function Sidebar({ onSetGenre }: Props) {
-  const [genres, setGenres] = useState<GenreData[]>([]);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    apiInstance
-      .get(`/genres?key=${import.meta.env.VITE_RAWG_API_KEY}`)
-      .then((response) => setGenres(response.data.results))
-      .catch((error) => setError(error.message));
-  }, []);
+  const { data: genres, error } = useGenres();
 
   return (
     <VStack pt={4} alignItems='flex-start'>
@@ -48,7 +32,7 @@ export function Sidebar({ onSetGenre }: Props) {
                   objectFit='cover'
                   borderRadius='6px'
                   src={genre.image_background}
-                  alt={genre.slug}
+                  alt={genre.name}
                 />
               </Box>
               <Button

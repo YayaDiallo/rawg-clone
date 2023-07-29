@@ -1,28 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { apiInstance } from '../../services/api-client';
-import { Platform } from '../GameList/GameList';
+import { Platform, usePlatforms } from '../../hooks/usePlatforms';
 
 interface Props {
-  onSetPlatformId: (id: number) => void;
+  onSetPlatform: (platform: Platform) => void;
 }
 
-export function GameFilter({ onSetPlatformId }: Props) {
+export function GameFilter({ onSetPlatform }: Props) {
   const [selectedPlatform, setSelectedPlatform] = useState('Platforms');
-  const [platforms, setPlatforms] = useState<Platform[]>([]);
-  const [error, setError] = useState('');
 
-  useEffect(() => {
-    apiInstance
-      .get(`/platforms/lists/parents?key=${import.meta.env.VITE_RAWG_API_KEY}`)
-      .then((response) => setPlatforms(response.data.results))
-      .catch((error) => setError(error.message));
-  }, []);
+  const { data: platforms } = usePlatforms();
 
   const handleChangePlatform = (platform: Platform) => {
     setSelectedPlatform(platform.name);
-    onSetPlatformId(platform.id);
+    onSetPlatform(platform);
   };
 
   return (

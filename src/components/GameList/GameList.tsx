@@ -10,69 +10,22 @@ import {
 } from '@chakra-ui/react';
 import { GoGoal } from 'react-icons/go';
 import { PlatformIconList } from './PlatformIconList';
-import { SortItem } from '../GameSorting/GameSorting';
 import { useGames } from '../../hooks/useGames';
 import { EmptyState } from '../EmptyState';
 import { getCroppedImageUrl } from '../../utils/croppedImageUrl';
-
-export interface Platform {
-  id: number;
-  name: string;
-  slug: string;
-}
-
-export interface GameData {
-  id: number;
-  background_image: string;
-  name: string;
-  slug: string;
-  metacritic: number;
-  parent_platforms: { platform: Platform }[];
-}
+import { GameQuery } from '../../App';
 
 interface Props {
-  platformId?: number;
-  genreId?: number;
-  sortItem?: SortItem;
-  searchValue?: string;
+  gameQuery: GameQuery;
 }
 
-export function GameList({
-  platformId,
-  genreId,
-  sortItem,
-  searchValue,
-}: Props) {
-  const key: string = import.meta.env.VITE_RAWG_API_KEY;
-
-  const queryParams = {
-    key,
-    parent_platforms: platformId,
-    genres: genreId,
-    ordering: sortItem?.value,
-    search: searchValue,
-  };
-
-  const constructUrlParams = (params: typeof queryParams) => {
-    let myParams = `?key=${params.key}`;
-    for (const query in params) {
-      const isParamsFilter = query !== 'key';
-      myParams +=
-        isParamsFilter && params[query as keyof typeof params]
-          ? `&${query}=${params[query as keyof typeof params]}`
-          : '';
-    }
-
-    return myParams;
-  };
-
-  const gamesUrl = `/games${constructUrlParams(queryParams)}`;
-  const { games, isLoading, error } = useGames(gamesUrl);
+export function GameList({ gameQuery }: Props) {
+  const { data: games, isLoading, error } = useGames(gameQuery);
 
   if (games?.length === 0) {
     return (
       <Box>
-        <EmptyState match='games' />
+        <EmptyState resource='games' />
       </Box>
     );
   }
@@ -92,7 +45,7 @@ export function GameList({
             <Image
               objectFit='cover'
               src={getCroppedImageUrl(game.background_image)}
-              alt={game.slug}
+              alt={game.name}
             />
           </Skeleton>
           <Flex p={3} flexDirection='column' gap={3}>

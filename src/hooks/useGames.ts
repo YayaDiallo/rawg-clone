@@ -1,32 +1,27 @@
-import { useEffect, useState } from 'react';
-import { GameData } from '../components/GameList/GameList';
-import { CanceledError, apiInstance } from '../services/api-client';
+import { GameQuery } from '../App';
+import { useData } from './useData';
+import { Platform } from './usePlatforms';
 
-export function useGames(gamesUrl: string) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [games, setGames] = useState<GameData[]>([]);
-  const [error, setError] = useState('');
+export interface Game {
+  id: number;
+  background_image: string;
+  name: string;
+  metacritic: number;
+  parent_platforms: { platform: Platform }[];
+  rating_top: number;
+}
 
-  useEffect(() => {
-    setIsLoading(true);
-    const abortController = new AbortController();
-
-    apiInstance
-      .get(gamesUrl, {
-        signal: abortController.signal,
-      })
-      .then((response) => {
-        setGames(response.data.results);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error instanceof CanceledError) return;
-        setError(error.message);
-        setIsLoading(false);
-      });
-
-    return () => abortController.abort();
-  }, [gamesUrl]);
-
-  return { games, isLoading, error };
+export function useGames(gameQuery: GameQuery) {
+  return useData<Game>(
+    '/games',
+    {
+      params: {
+        genres: gameQuery.genre?.id,
+        platforms: gameQuery.platform?.id,
+        ordering: gameQuery.sortOrder,
+        search: gameQuery.searchText,
+      },
+    },
+    [gameQuery],
+  );
 }

@@ -15,15 +15,15 @@ import {
 import { FormEvent, useRef } from 'react';
 
 interface Props {
-  onSetSearchValue: (value?: string) => void;
+  onSearch: (text: string) => void;
 }
 
-export function Navbar({ onSetSearchValue }: Props) {
+export function Navbar({ onSearch }: Props) {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSetSearchValue(searchRef.current?.value);
+    if (searchRef.current) onSearch(searchRef.current.value);
   };
 
   const { colorMode, toggleColorMode } = useColorMode();

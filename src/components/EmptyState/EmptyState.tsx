@@ -1,14 +1,14 @@
 import { Box, Text } from '@chakra-ui/react';
 
 interface Props {
-  match: string;
+  resource: string;
 }
 
-export function EmptyState({ match }: Props) {
+export function EmptyState({ resource }: Props) {
   return (
     <Box>
       <Text as='h2' fontSize='3xl'>
-        No {match} found!
+        No {resource} found!
       </Text>
     </Box>
   );

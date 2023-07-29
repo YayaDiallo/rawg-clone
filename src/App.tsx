@@ -5,14 +5,18 @@ import { GameList } from './components/GameList';
 import { GameFilter } from './components/GameFilter';
 import { GameSorting } from './components/GameSorting';
 import { useState } from 'react';
-import { GenreData } from './components/Sidebar/Sidebar';
-import { SortItem } from './components/GameSorting/GameSorting';
+import { Platform } from './hooks/usePlatforms';
+import { Genre } from './hooks/useGenres';
+
+export interface GameQuery {
+  genre: Genre | null;
+  platform: Platform | null;
+  sortOrder: string;
+  searchText: string;
+}
 
 function App() {
-  const [platformId, setPlatformId] = useState<number>();
-  const [genre, setGenre] = useState<GenreData>();
-  const [sortItem, setSortItem] = useState<SortItem>();
-  const [searchValue, setSearchValue] = useState<string | undefined>();
+  const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
 
   return (
     <Grid
@@ -22,25 +26,33 @@ function App() {
       gap={8}
     >
       <GridItem area='nav'>
-        <Navbar onSetSearchValue={setSearchValue} />
+        <Navbar
+          onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
+        />
       </GridItem>
       <GridItem as='aside' area='aside'>
-        <Sidebar onSetGenre={setGenre} />
+        <Sidebar
+          onSetGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
+        />
       </GridItem>
       <GridItem as='main' area='main'>
         <Heading as='h2' size='3xl' py={2} mb={4}>
-          {genre && genre.name} Games
+          {gameQuery.genre && gameQuery.genre.name} Games
         </Heading>
         <Flex gap={4} py={4}>
-          <GameFilter onSetPlatformId={setPlatformId} />
-          <GameSorting onSetSortItem={setSortItem} />
+          <GameFilter
+            onSetPlatform={(platform) =>
+              setGameQuery({ ...gameQuery, platform })
+            }
+          />
+          <GameSorting
+            sortOrder={gameQuery.sortOrder}
+            onSetSortOrder={(sortOrder) =>
+              setGameQuery({ ...gameQuery, sortOrder })
+            }
+          />
         </Flex>
-        <GameList
-          platformId={platformId}
-          genreId={genre?.id}
-          sortItem={sortItem}
-          searchValue={searchValue}
-        />
+        <GameList gameQuery={gameQuery} />
       </GridItem>
     </Grid>
   );
