@@ -5,9 +5,9 @@ import {
   Heading,
   Image,
   ListItem,
+  Spinner,
   UnorderedList,
   VStack,
-  Text,
 } from '@chakra-ui/react';
 import { Genre, useGenres } from '../../hooks/useGenres';
 
@@ -16,12 +16,15 @@ interface Props {
 }
 
 export function Sidebar({ onSetGenre }: Props) {
-  const { data: genres, error } = useGenres();
+  const { data: genres, isLoading, error } = useGenres();
+
+  if (error) return null;
+
+  if (isLoading) return <Spinner />;
 
   return (
     <VStack pt={4} alignItems='flex-start'>
       <Heading>Genres</Heading>
-      {error && <Text color='red.500'>{error}</Text>}
       <UnorderedList m='0px'>
         {genres.map((genre) => (
           <ListItem key={genre.id} listStyleType='none' pt='8x' pb='8px'>

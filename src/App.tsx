@@ -1,4 +1,4 @@
-import { Flex, Grid, GridItem, Heading } from '@chakra-ui/react';
+import { Flex, Grid, GridItem } from '@chakra-ui/react';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 import { GameList } from './components/GameList';
@@ -7,6 +7,7 @@ import { GameSorting } from './components/GameSorting';
 import { useState } from 'react';
 import { Platform } from './hooks/usePlatforms';
 import { Genre } from './hooks/useGenres';
+import { GameHeading } from './components/GameHeading';
 
 export interface GameQuery {
   genre: Genre | null;
@@ -36,9 +37,7 @@ function App() {
         />
       </GridItem>
       <GridItem as='main' area='main'>
-        <Heading as='h2' size='3xl' py={2} mb={4}>
-          {gameQuery.genre && gameQuery.genre.name} Games
-        </Heading>
+        <GameHeading gameQuery={gameQuery} />
         <Flex gap={4} py={4}>
           <GameFilter
             onSetPlatform={(platform) =>

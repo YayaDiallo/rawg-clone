@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Flex,
   Heading,
@@ -8,12 +7,13 @@ import {
   Skeleton,
   Text,
 } from '@chakra-ui/react';
-import { GoGoal } from 'react-icons/go';
 import { PlatformIconList } from './PlatformIconList';
 import { useGames } from '../../hooks/useGames';
 import { EmptyState } from '../EmptyState';
 import { getCroppedImageUrl } from '../../utils/croppedImageUrl';
 import { GameQuery } from '../../App';
+import { CriticScore } from './CriticScore';
+import { Emoji } from './Emoji';
 
 interface Props {
   gameQuery: GameQuery;
@@ -30,9 +30,10 @@ export function GameList({ gameQuery }: Props) {
     );
   }
 
+  if (error) return <Text color='red.500'>{error}</Text>;
+
   return (
     <SimpleGrid columns={3} spacing={5} minChildWidth='250px'>
-      {error && <Text color='red.500'>{error}</Text>}
       {games.map((game) => (
         <Box
           key={game.id}
@@ -56,9 +57,7 @@ export function GameList({ gameQuery }: Props) {
                     ({ platform }) => platform,
                   )}
                 />
-                <Badge fontSize='0.8em' colorScheme='green'>
-                  {game.metacritic}
-                </Badge>
+                <CriticScore score={game.metacritic} />
               </Box>
             </Skeleton>
             <Skeleton isLoaded={!isLoading} fadeDuration={1}>
@@ -67,9 +66,7 @@ export function GameList({ gameQuery }: Props) {
               </Heading>
             </Skeleton>
             <Skeleton isLoaded={!isLoading} fadeDuration={1}>
-              <Box>
-                <GoGoal size={30} />
-              </Box>
+              <Emoji rating={game.rating_top} />
             </Skeleton>
           </Flex>
         </Box>
