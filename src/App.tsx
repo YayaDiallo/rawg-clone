@@ -1,4 +1,4 @@
-import { Flex, Grid, GridItem } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Show } from '@chakra-ui/react';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 import { GameList } from './components/GameList';
@@ -22,8 +22,14 @@ function App() {
   return (
     <Grid
       p={4}
-      templateAreas={`"nav nav""aside main"`}
-      gridTemplateColumns={'250px 1fr'}
+      templateAreas={{
+        base: `'nav' 'main'`,
+        lg: `'nav nav' 'aside main'`,
+      }}
+      templateColumns={{
+        base: '1fr',
+        lg: '200px 1fr',
+      }}
       gap={8}
     >
       <GridItem area='nav'>
@@ -31,11 +37,13 @@ function App() {
           onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
         />
       </GridItem>
-      <GridItem as='aside' area='aside'>
-        <Sidebar
-          onSetGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
-        />
-      </GridItem>
+      <Show above='lg'>
+        <GridItem as='aside' area='aside'>
+          <Sidebar
+            onSetGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
+          />
+        </GridItem>
+      </Show>
       <GridItem as='main' area='main'>
         <GameHeading gameQuery={gameQuery} />
         <Flex gap={4} py={4}>
