@@ -1,4 +1,3 @@
-import { Platform } from './GameList';
 import {
   FaApple,
   FaXbox,
@@ -12,6 +11,7 @@ import { BsGlobe } from 'react-icons/bs';
 import { MdPhoneIphone } from 'react-icons/md';
 import { IconType } from 'react-icons';
 import { Flex, Icon } from '@chakra-ui/react';
+import { Platform } from '../../hooks/usePlatforms';
 
 interface Props {
   platforms: Platform[];
